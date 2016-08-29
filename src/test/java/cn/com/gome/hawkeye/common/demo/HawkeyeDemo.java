@@ -20,12 +20,12 @@ public class HawkeyeDemo {
                 .setTimeout(10000)
                 .build();
 
-        //        try {
-        //            CollectorConfig config = CollectorConfig.custom()
+        //try {
+        //      CollectorConfig config = CollectorConfig.custom()
         //                    .setFilename("config.properties").load();
-        //        } catch (IOException e) {
-        //            e.printStackTrace();
-        //        }
+        //} catch (IOException e) {
+        //      e.printStackTrace();
+        //}
 
         Collector collector = CollectorBuilder.create()
                 .setDefaultConfig(config)
