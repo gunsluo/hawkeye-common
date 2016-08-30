@@ -39,13 +39,14 @@ public class Collector {
     public void collect() {
 
         for (final CollectBlock collectBlock : this.collectBlocks) {
+            int interval = collectBlock.getInterval();
             ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
             executor.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
                     task(collectBlock);
                 }
-            }, 0, config.getInterval(), TimeUnit.SECONDS);
+            }, 0, interval, TimeUnit.SECONDS);
         }
     }
 
@@ -57,7 +58,7 @@ public class Collector {
             Metrics metrics = collectPoint.collect();
             for (MetricValue mv : metrics.getMetricValues()) {
                 mv.setEndpoint(config.getHostname());
-                mv.setStep(config.getInterval());
+                mv.setStep(collectBlock.getInterval());
                 mv.setTimestamp((int) now);
                 mvs.add(mv);
             }
