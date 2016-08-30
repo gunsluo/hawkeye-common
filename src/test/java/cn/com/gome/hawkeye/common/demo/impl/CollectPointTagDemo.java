@@ -23,7 +23,7 @@ public class CollectPointTagDemo implements CollectPoint {
     }
 
     public double value() {
-        int idx = Utils.randInt(0, 9);
+        int idx = Utils.randInt(0, 4);
         return VALUES[idx];
     }
 }

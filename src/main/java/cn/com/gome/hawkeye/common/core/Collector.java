@@ -3,10 +3,11 @@ package cn.com.gome.hawkeye.common.core;
 import cn.com.gome.hawkeye.common.client.AgentClient;
 import cn.com.gome.hawkeye.common.client.impl.HttpAgentClient;
 import cn.com.gome.hawkeye.common.config.CollectorConfig;
-import cn.com.gome.hawkeye.common.model.CollectBlock;
-import cn.com.gome.hawkeye.common.model.CollectBlocks;
 import cn.com.gome.hawkeye.common.model.MetricValue;
 import cn.com.gome.hawkeye.common.model.Metrics;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +21,14 @@ import java.util.concurrent.TimeUnit;
  * @since 2016/8/29 0029
  */
 public class Collector {
+    private static Logger logger = LoggerFactory.getLogger(Collector.class);
     private CollectorConfig config;
-    private CollectDataSources collectDataSources;
+    private List<CollectBlock> collectBlocks;
     private AgentClient client;
 
-    Collector(CollectorConfig config, CollectDataSources collectDataSources) {
+    Collector(CollectorConfig config, List<CollectBlock> collectBlocks) {
         this.config = config;
-        this.collectDataSources = collectDataSources;
+        this.collectBlocks = collectBlocks;
         this.init();
     }
 
@@ -36,8 +38,7 @@ public class Collector {
 
     public void collect() {
 
-        CollectBlocks collectBlocks = this.collectDataSources.getDataSources();
-        for (final CollectBlock collectBlock : collectBlocks.getCollectBlocks()) {
+        for (final CollectBlock collectBlock : this.collectBlocks) {
             ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
             executor.scheduleAtFixedRate(new Runnable() {
                 @Override
@@ -48,7 +49,7 @@ public class Collector {
         }
     }
 
-    public synchronized void task(CollectBlock collectBlock) {
+    public void task(CollectBlock collectBlock) {
         List<MetricValue> mvs = new ArrayList<MetricValue>();
         long now = System.currentTimeMillis() / 1000L;
         for (final CollectPoint collectPoint : collectBlock.getCollectPoints()) {
@@ -66,9 +67,9 @@ public class Collector {
         try {
             boolean flag = client.send(mvs);
             if (flag == true) {
-                System.out.println("send data to agent success.");
+                logger.info("send data to agent success.");
             } else {
-                System.out.println("send data to agent failed.");
+                logger.warn("send data to agent failed.");
             }
         } catch (Exception e) {
             e.printStackTrace();

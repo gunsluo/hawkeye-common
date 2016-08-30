@@ -52,12 +52,11 @@ public class HttpAgentClient implements AgentClient {
             s.setContentEncoding("UTF-8");
             s.setContentType("application/json");
             post.setEntity(s);
-//            System.out.println("text josn" + textJson);
 
             HttpResponse res = client.execute(post);
             if (res.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 HttpEntity entity = res.getEntity();
-                String body = EntityUtils.toString(res.getEntity());
+                String body = EntityUtils.toString(entity);
                 if ("success".equals(body)) {
                     flag = true;
                 }
