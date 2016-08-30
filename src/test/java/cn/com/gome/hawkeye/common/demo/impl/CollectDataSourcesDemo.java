@@ -15,11 +15,19 @@ public class CollectDataSourcesDemo implements CollectDataSources {
     @Override
     public CollectBlocks getDataSources() {
         CollectPoint collectPoint = new CollectPointRandomDemo();
+        CollectPoint collectPointDoubleDemo = new CollectPointDoubleDemo();
+        CollectPoint collectPointTagDemo = new CollectPointTagDemo();
         CollectBlock collectBlock = new CollectBlock();
+        CollectBlock collectBlock2 = new CollectBlock();
         CollectBlocks collectBlocks = new CollectBlocks();
 
         collectBlock.addCollectPoint(collectPoint);
+        collectBlock.addCollectPoint(collectPointDoubleDemo);
+        collectBlock2.addCollectPoint(collectPointTagDemo);
+
+
         collectBlocks.addCollectBlock(collectBlock);
+        collectBlocks.addCollectBlock(collectBlock2);
 
         return collectBlocks;
     }
