@@ -16,7 +16,7 @@ import java.util.List;
  * @params
  * @since 2016/8/29 0029
  */
-public class HawkeyeDemo {
+public class Demo {
     public static void main(String[] args) {
 
         CollectorConfig config = CollectorConfig.custom()
